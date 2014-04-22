@@ -34,6 +34,7 @@ class Resultor(Plugin):
         current_time = time.time()
         self.result['duration'] = round(current_time - self.current_time, 2)
         self.current_time = current_time
+        self.send_result(self.result)
 
     def addSuccess(self, test):
         self.result['status'] = 'pass'
@@ -46,10 +47,12 @@ class Resultor(Plugin):
         self.result['status'] = 'fail'
         self.result['trace'] = self.formatErr(err)
 
-    def finalize(self, result):
+    def send_result(self, result):
         headers = {'content-type': 'Content-Type:text/json'}
-        uri = 'http://127.0.0.1:5000/api/result'
-        requests.put(uri, data=json.dumps(self.results), headers=headers)
+        host = os.environ.get('RESULTOR_HOST')
+        if host:
+            uri = 'http://{0}/api/result'.format(host)
+            requests.put(uri, data=json.dumps([result]), headers=headers)
 
     def formatErr(self, err):
         """format error"""
