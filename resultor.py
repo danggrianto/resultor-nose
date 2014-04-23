@@ -42,10 +42,19 @@ class Resultor(Plugin):
     def addFailure(self, test, err):
         self.result['status'] = 'fail'
         self.result['trace'] = self.formatErr(err)
+        try:
+            browser = test.test.browser
+            self.result['screenshot'] = 'data:image/png;base64,{0}'\
+                .format(browser.get_screenshot_as_base64())
+        except AttributeError:
+            pass
 
     def addError(self, test, err):
-        self.result['status'] = 'fail'
-        self.result['trace'] = self.formatErr(err)
+        try:
+            self.result['status'] = 'fail'
+            self.result['trace'] = self.formatErr(err)
+        except Exception:
+            pass
 
     def send_result(self, result):
         headers = {'content-type': 'Content-Type:text/json'}
