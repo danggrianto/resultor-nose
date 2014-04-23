@@ -53,6 +53,9 @@ class Resultor(Plugin):
         try:
             self.result['status'] = 'fail'
             self.result['trace'] = self.formatErr(err)
+            browser = test.test.browser
+            self.result['screenshot'] = 'data:image/png;base64,{0}'\
+                .format(browser.get_screenshot_as_base64())
         except Exception:
             pass
 
