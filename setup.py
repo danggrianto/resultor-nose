@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='Resultor',
-    version='0.0.3',
+    version='0.0.4',
     description='Plugin to send test result to resultor',
     author='Daniel Anggrianto',
     author_email='daniela@aweber.com',
